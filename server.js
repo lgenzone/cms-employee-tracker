@@ -26,7 +26,7 @@ db.connect(function(err) {
 
 function init () {
     console.log(`Connected to the business_db database.`)
-    const department = new Department();
+    const department = new Department(db);
     inquirer
   .prompt([
     {
@@ -38,13 +38,16 @@ function init () {
   ])
   .then((data) => {
     const {menuChoice} = data;
-    if (menuChoice === 'View all departments') {
-        console.log('display all departments')
+    if (menuChoice === 'view all departments') {
+        
         department.viewAllDepartments(db);
     }
     
   });
+  
 
 
-}
+};
+
+
 
