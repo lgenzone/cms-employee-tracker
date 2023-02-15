@@ -8,8 +8,7 @@ CREATE TABLE department (
     name VARCHAR(30),
     PRIMARY KEY (id)
 );
- 
- -- create new table for 'role' --
+
 CREATE TABLE role (
     id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(30),
@@ -21,7 +20,6 @@ CREATE TABLE role (
     ON DELETE SET NULL
 );
 
--- create new table for 'employee' -- 
 create TABLE employee (
     id INT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(30),

@@ -9,12 +9,9 @@ require('dotenv').config();
 const fs = require('fs');
 const db = require('./config/connection');
 const Department = require('./lib/department');
-
-/* query database 
-db.query('SELECT', function (err, results) {
-    console.log(results);
-});
-*/
+const Role = require('./lib/role');
+const employee = require('./lib/employee');
+const Employee = require('./lib/employee');
 
 db.connect(function(err) {
     if(err) {
@@ -27,6 +24,8 @@ db.connect(function(err) {
 function init () {
     console.log(`Connected to the business_db database.`)
     const department = new Department(db);
+    const role = new Role(db);
+    const employee = new Employee(db);
     inquirer
   .prompt([
     {
@@ -39,15 +38,20 @@ function init () {
   .then((data) => {
     const {menuChoice} = data;
     if (menuChoice === 'view all departments') {
-        
         department.viewAllDepartments(db);
     }
+
+    if (menuChoice === 'view all roles') {
+      role.viewAllRoles(db);
+    }
+
+    if (menuChoice === 'view all employees') {
+      employee.viewAllEmployees(db);
+    }
+
     
   });
-  
-
 
 };
-
 
 
