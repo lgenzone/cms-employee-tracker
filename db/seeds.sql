@@ -13,7 +13,7 @@ VALUES
 ('Marketing Specialist', 75000, 1),
 ('Financial Analyst', 150000, 2),
 ('Operations Manager', 120000, 3),
-('HR Resources', 80000, 4), 
+('HR', 80000, 4), 
 ('IT Technician', 65000, 5);
 
 INSERT INTO employee (last_name, first_name, role_id, manager_id)
