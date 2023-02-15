@@ -10,7 +10,6 @@ const fs = require('fs');
 const db = require('./config/connection');
 const Department = require('./lib/department');
 const Role = require('./lib/role');
-const employee = require('./lib/employee');
 const Employee = require('./lib/employee');
 
 db.connect(function(err) {
@@ -20,6 +19,8 @@ db.connect(function(err) {
     console.log('connected to db')
     init();
   })
+
+  
 
 function init () {
     console.log(`Connected to the business_db database.`)
@@ -49,9 +50,31 @@ function init () {
       employee.viewAllEmployees(db);
     }
 
-    
+    if (menuChoice === 'add a role') {
+      inquirer
+    .prompt([
+      {
+        type: 'input',
+        message: "what is the role's title?",
+        name: 'title',
+      },
+      {
+        type: 'number',
+        message: 'enter the salary for this role',
+        name: 'salary',
+      },
+      {
+        type: 'number',
+        message: 'enter the department ID for this role',
+        name: 'department_id',
+      },
+    ])
+    .then((data) => {
+      const { title, salary, department_id } = data;
+      role.addRole(title, salary, department_id);
+    });
+    }
   });
-
-};
+}
 
 
