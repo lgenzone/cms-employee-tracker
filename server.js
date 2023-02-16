@@ -55,21 +55,27 @@ db.connect(function(err) {
       init();
     }
 
-    if (menuChoice === 'add a department') {
-      inquirer
-    .prompt([
-      {
-        type: 'input',
-        message: "what is the name of the department?",
-        name: 'name',
-      },
-    ])
-    .then((data) => {
-      const { name, id } = data;
-      department.addDepartment(name, id);
+if (menuChoice === 'add a department') {
+  inquirer.prompt([
+    {
+      type: 'input',
+      message: 'What is the name of the department?',
+      name: 'name',
+    },
+  ]).then((data) => {
+    const { name } = data;
+    department.addDepartment(name, (error, result) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+      console.log(`${result.affectedRows} department added!\n`);
+      department.viewAllDepartments();
       init();
     });
-    }
+  });
+}
+
 
     if (menuChoice === 'add a role') {
       inquirer
@@ -87,7 +93,7 @@ db.connect(function(err) {
       {
         type: 'list',
         message: 'which department does the role belong to?',
-        choices: ['Marketing', 'Finance', 'Operations Management', 'Human Resources (HR)', 'Information Technology (IT)'],
+        choices: ['Marketing', 'Finance', 'Operations Management', 'Human Resources (HR)', 'Information Technology (IT)', 'Legal'],
         name: 'department',
       },
     ])
@@ -126,7 +132,6 @@ db.connect(function(err) {
               });
             });
           }
-
         },
         {
           type: 'list',
