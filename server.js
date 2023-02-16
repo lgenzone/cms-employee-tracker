@@ -127,14 +127,31 @@ db.connect(function(err) {
           }
 
         },
+        {
+          type: 'list',
+          message: `who is this employee's manager?`,
+          name: 'manager_id',
+          choices: () => {
+            return new Promise((resolve, reject) => {
+              const query = 'SELECT id, CONCAT(first_name, " ", last_name) AS name FROM employee WHERE manager_id IS NULL';
+              db.query(query, (error, results) => {
+                if (error) {
+                  reject(error);
+                } else {
+                  const choices = results.map(row => ({ name: row.name, value: row.id }));
+                  choices.unshift({ name: 'None', value: null }); // add 'none' option at the beginning
+                  resolve(choices);
+                }
+              });
+            });
+          }
+        },
       ])
       .then((data) => {
         const { first_name, last_name, role_id, manager_id } = data;
         employee.addEmployee(first_name, last_name, role_id, manager_id);
         init();
       });  
-      
-
     }
 
     if (menuChoice === 'exit') {
