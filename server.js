@@ -11,6 +11,7 @@ const db = require('./config/connection');
 const Department = require('./lib/department');
 const Role = require('./lib/role');
 const Employee = require('./lib/employee');
+const { resolve } = require('path');
 
 
 db.connect(function(err) {
@@ -151,6 +152,51 @@ db.connect(function(err) {
         const { first_name, last_name, role_id, manager_id } = data;
         employee.addEmployee(first_name, last_name, role_id, manager_id);
         init();
+      });  
+    }
+
+    if (menuChoice === 'update employee role') {
+      inquirer
+      .prompt([
+        {
+          type: 'list',
+          message: `which employee's role would you like to update?`,
+          name: 'employee_id',
+          choices: () => {
+            return new Promise((resolve, reject) => {
+              const query = 'SELECT id, CONCAT(first_name, " ", last_name) AS name FROM employee';
+              db.query(query, (error, results) => {
+                if (error) {
+                  reject(error);
+                } else {
+                  resolve(results.map(row => ({ name: row.name, value: row.id })));
+                }
+              });
+            });
+          }
+        },
+        {
+          type: 'list',
+      message: `What is the employee's new role?`,
+      name: 'new_role_id',
+      choices: () => {
+        return new Promise((resolve, reject) => {
+          const query = 'SELECT id, title FROM role';
+          db.query(query, (error, results) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(results.map(row => ({ name: row.title, value: row.id })));
+            }
+          });
+        });
+      } 
+        },
+      ])
+      .then((data) => {
+        const { employee_id, new_role_id } = data;
+        employee.updateEmployeeRole(employee_id, new_role_id);
+        init(); 
       });  
     }
 
